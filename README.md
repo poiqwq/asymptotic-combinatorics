@@ -2,6 +2,8 @@
 
 Поиск центральной меры на градуированном графе
 
+This is only the beginning of the project. Access to the full research materials can be granted if you send a request by an email.
+
 ### main.cpp
 Граф Юнга с заданным количеством этажей и стоком, для всех вершин с предпоследнего уровня итеративно центрируется и нормируется с помощью алгоритма ромбов до получения центральной меры
 
