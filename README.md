@@ -1,12 +1,16 @@
 # Asymptotic Combinatorics
 
 ## Finding of Central Measure on an Oriented Graph
+1. Generate graph, run an algorithm of finding central measure --> get transition probabilities of it's edges
+2. Analyse transition probabilities dataset, confirm hypothesis --> derive a formula of central mesure graph transition probabilities
 
-This is only the raw materials of the project. Access to the full research documentation can be granted if you send a request by an email.
+---
 
-### all_in_one_pro.cpp
-
-Generate graph, run an algorithm of finding central measure --> get transition probabilities of it's edges
+## Research Questions
+- How transition probabilities behave across increasing graph layers
+- Whether transition probabilities demonstrate stable asymptotic patterns
+- How probability values change as the number of edges increase on the graphs with undescribed central measures
+- Whether the observed central measures for this graphs can be described by mathematical functions
 
 ---
 
@@ -14,8 +18,8 @@ Generate graph, run an algorithm of finding central measure --> get transition p
 - Pascal graph
 - Young graph
 - The graph of two-row Young diagrams
-- The graph of three-row Young diagrams
-- The graph of three-dimensional Young diagrams (3D Young Graph)
+- The graph of three-row Young diagrams -- central measures are not fully determined in literature
+- The graph of three-dimensional Young diagrams (3D Young Graph) -- central measures are not fully determined in literature
 
 ---
 
@@ -25,80 +29,91 @@ Generate graph, run an algorithm of finding central measure --> get transition p
 
 ---
 
-##### Arguments
+## Analysis
 
-| Argument | Usage |
-| --- | --- |
-| graph_name | Choose which graph would be generated |
-| algorithm | Choose which graph would be used |
-| E | Choose the allowed mistake of the algorithm |
-| LEVEL | Choose how many levels of the graph would be generated |
-| ABSTRACT_STOCK | Choose will the graph be ended with its last generated level or all of the vertexes of the last level would be connected with abstract one on the next level |
-| START_WEIGHT | Choose start transition probabilities of the edges |
-| FILE_NUM | Choose the amount of edges to get their transition probabilities |
+### Graph Generation
+
+- Developed a C++ program to generate subgraphs of Young graph and related graded graph structures
+- Automated the process of graph construction for different graph types and dimensions
+- Added a feature of working with multiple graphs simmultaniously
 
 ---
 
+### Central Measure Calculation
 
+- Implemented algorithms to calculate central measures on generated subgraphs
+- Extracted transition probabilities for graph edges depending of graph dimension
+- Produced structured output files containing probability values in order of graph levels amount increasing by 1
 
+---
 
-HISTORICAL PROJECT INFO
-### main.cpp
-Граф Юнга с заданным количеством этажей и стоком, для всех вершин с предпоследнего уровня итеративно центрируется и нормируется с помощью алгоритма ромбов до получения центральной меры
+### Transition Probability Analysis
 
-Параметры:
+- Analyzed large-scale numerical datasets produced by graph algorithms in gnuplot
+- Studied how transition probabilities change as graph levels increase at the maximum server performance
 
-int LEVEL -- этаж, до которого будет построен и обработан граф Юнга
+---
 
-int TIMES -- количество итераций приближения (для отладки 1, иначе n > LEVEL)
+### Asymptotic Pattern Detection
 
-int VER1 -- индекс первой вершины, ребра, по которому будет выводиться вероятность перехода (индексация вершин с единицы)
+- Identified patterns in probability behavior across graph structures -- H<sup>0</sup>: approximated with hyperbolic function
+- The mistake between approximated probability and theoretical one for graphs with existing formulas for transition probabilities 
+- The mistake was less than 10<sup>-5</sup> so H<sup>0</sup> was confirmed
 
-int VER2 -- индекс второй вершины ребра
+<img width="336" height="273" alt="image" src="https://github.com/user-attachments/assets/b4adf45c-24c8-40a8-99a4-07db752b12fd" />
 
-bool ABSTRACT_STOCK -- 1 для стока всех вершин этажа LEVEL в абстрактную вершину на уровне LEVEL + 1, иначе 0
+### Data Validation
 
-float E -- 0.00001 параметр остановки итерационного приближения (Критерий остановки: среднее квадратическое последней и предпоследней итерации < E)
+- Checked generated outputs for consistency across different algorithms and start weights
+- Extremely increase the number of iterations and graph dimensions and compare results
+- Checked the behaviour of different groups of edges
 
-float START_WEIGT -- начальный вес ребер в графе
+<img width="361" height="307" alt="image" src="https://github.com/user-attachments/assets/ca103bb3-c37b-4ede-8dbd-66b301eb4b03" />
 
+### Deriving a formula for an undetermined in literature central measure
 
-Не используется:
-int HUNTED -- номер вершины на последнем уровне, в которую будет производиться сток (с дальнейшим переходом к подграфу) 
+- The new schematic picture of the beginning of the three-row Young diagram graph was suggested
+- The edges with teoretically similar weights were naimed and put on the scheme
+- Graph transition probabilities were approximated with hyperbolic function
+- The rational numbers, close to the approximated were chosen
+- The properpty of centrality were checked on this scheme
+- The formula for one group of the edges was derived
 
+<img width="162" height="50" alt="image" src="https://github.com/user-attachments/assets/1cdf363e-5e41-47fd-94cc-0f9fceb36935" />
 
-Алгоритм выводит 2 файла:
-1) Вероятность перехода по запрашиваемому ребру в зависимости от итерации
-2) СКО в зависимости от итерации
+TODO
+- Derive a formula for transition probabitities of the next two ot three group of edges
+- Find a general formula for central mesure transition probabilities for the graph of three-row Young diagrams
 
-### main_endless.cpp
-Граф Юнга с заданным количеством этажей и стоком для всех вершин с предпоследнего уровня итеративно центрируется и нормируется с помощью алгоритма ромбов до получения центральной меры, далее заданное количество раз происходит следующий процесс: удаляется сток и граф Юнга дополняется заданным количеством этажей со стоком, полученный граф итеративно центрируется и нормируется пока не будет получено достаточное приближение к центарльной мере
+---
 
-Параметры:
+## Tech Stack
 
-int LEVEL -- этаж, до которого будет построен и обработан граф Юнга
+- C++
+- Gnuplot
+- Mathcad lib
+- Algorithms and data structures
+- Computational and asympthotic mathematics
+- Graph theory
+- Large-scale numerical data analysis
+- Mathematical modeling
+- Data validation
+- Research documentation
 
-int FLORES -- количество этажей, которые будут добавляться к изначальному графу на каждом шагу TASK
+---
 
-int LEVEL -- количество итераций добавления этажей к текущему графу Юнга
+## Key Takeaways
 
-int TIMES -- количество итераций приближения вероятностной меры к центральной (для отладки -- 1, иначе -- n > LEVEL + FLORES * TASK)
+- Generated numerical datasets for multiple oriented graded graphs
+- Implemented algorithms for finding central measures
+- Analyzed transition probabilities across increasing graph complexity
+- Identified asymptotic behavior in probability values
+- Derive a formula for transition probabitities of one group of edges for the graph of three-row Young diagrams
 
-int VER1 -- индекс первой вершины, ребра, по которому будет выводиться вероятность перехода (индексация вершин с единицы)
+---
 
-int VER2 -- индекс второй вершины ребра
+## Notes
 
-bool ABSTRACT_STOCK -- 1 для стока всех вершин этажа LEVEL в абстрактную вершину на уровне LEVEL + 1, иначе 0
+This repository contains raw materials of the research project, including source code and generated numerical outputs.
 
-float E -- 0.00001 параметр остановки итерационного приближения (Критерий остановки: среднее квадратическое последней и предпоследней итерации < E)
-
-float START_WEIGT -- начальный вес ребер в графе (задать начальную вероятность по Ричардсону -- 0, рандомно на отрезке (0, 1) с точностью до десятых -- 1)
-
-
-Не используется:
-int HUNTED -- номер вершины на последнем уровне, в которую будет производиться сток (с дальнейшим переходом к подграфу) 
-
-
-Алгоритм выводит 2 файла:
-1) Вероятность перехода по запрашиваемому ребру в зависимости от итерации (учитываются итерации из каждого задания TASK)
-2) СКО в зависимости от итерации (учитываются итерации из каждого задания TASK)
+The project reflects research work in asymptotic combinatorics, graph algorithms, computational mathematics, and large-scale numerical analysis.
