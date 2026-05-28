@@ -1,5 +1,4 @@
-
-// Для успешной компиляции, необходимо использовать стандарт С++11
+// Should be used a standard С++11
 
 #include <iostream>
 #include <fstream>
@@ -9,13 +8,13 @@
 #include <cstdlib>
 #include <time.h>
 #include <map>
-#include "gmp-6.3.0/gmpxx.h" // Для больших целых чисел (brew install gmp)
+#include "gmp-6.3.0/gmpxx.h" // For big numbers (brew install gmp)
 
 #ifdef _WIN32
-#include <direct.h>  // Для Windows (_mkdir)
+#include <direct.h>  // For Windows (_mkdir)
     #define make_dir(name) _mkdir(name)
 #else
-#include <sys/stat.h>  // Для Linux/macOS (mkdir)
+#include <sys/stat.h>  // For Linux/macOS (mkdir)
 #include <sys/types.h>
 #define make_dir(name) mkdir(name, 0777)
 #endif
@@ -43,26 +42,28 @@ string folder_name = graph_name + "_" + algorithm + "_" + to_string(LEVEL + (TAS
 class Vertex
 {
 public:
-    Vertex(int index) // конструктор класса
+    Vertex(int index) 
     {
         set_vertex(index);
     }
-    mpz_class dim = 0;
-    unordered_map<int, float> parents;
-    vector<int> parents_idx;
-    unordered_map<int, float> children;
-    unordered_map<int, float> children_kops;
-    vector<int> children_idx;
+    mpz_class dim = 0; // The dimension of vertex (For an algorithm of Kops)
+    unordered_map<int, float> parents; // Number of the parent vertex and the edge's transition probability
+    vector<int> parents_idx; // The vector of each parent vertex number
+    unordered_map<int, float> children; // Number of the children vertex and the edge's transition probability
+    unordered_map<int, float> children_kops; // Number of the children vertex and the edge's kop probability (For Kops)
+    vector<int> children_idx; // The vector of each children vertex number
     void set_vertex(int index)
     {
         idx = index;
     }
-    void add_parent(int parent_index, float parent_weight)
+    // Function to save dependences of graph during the generation process
+    void add_parent(int parent_index, float parent_weight) 
     {
-        parents[parent_index] = parent_weight;
+        parents[parent_index] = parent_weight; 
         parents_idx.push_back(parent_index);
     }
-    void add_child(int child_index, float child_weight)
+    // Function to save dependences of graph during the generation process
+    void add_child(int child_index, float child_weight) 
     {
         children[child_index] = child_weight;
         children_kops[child_index] = 0.0;
@@ -79,14 +80,13 @@ private:
     int idx;
 };
 
-// класс графа
 class Graph
 {
 public:
-    vector<Vertex> vertexList;
+    vector<Vertex> vertexList; // The vector of vertex objects, ordered by generation
     vector<int> indexes; // for file naming in 3D
-    vector<vector<vector<int>>> current_young_list;
-    vector<vector<vector<vector<int>>>> current_young_list_3D;
+    vector<vector<vector<int>>> current_young_list; // The vector of 2D Young diagrams, ordered by generation
+    vector<vector<vector<vector<int>>>> current_young_list_3D; // The vector of 3D Young diagrams, ordered by generation
     int new_level = LEVEL;
     int last_level = 1;
     int index_prev_level = 1;
@@ -96,11 +96,11 @@ public:
     int cur_index = 1;
     int hunted_index = 1;
     int romb_start_index = 1;
-    vector<vector<vector<int>>> rombsLists;
+    vector<vector<vector<int>>> rombsLists; // TODO
     vector <float> weights_last_level;
     vector <float> weights_this_level;
     vector <float> weights_last_task;
-    vector <ofstream> files;
+    vector <ofstream> files; // files to show transition probabilities of edges after algoritm performs
     void add_vertex(int new_index, int current_index)
     {
         vertexList.push_back(Vertex(new_index));
@@ -110,14 +110,14 @@ public:
 };
 
 void open_files();
-void young_level_3D(Graph* graph);
-void young_level_2D(Graph* graph);
-void find_kops(Graph* graph);
-void find_rombs(Graph* graph);
-int central_normal(Graph* graph);
-void delete_last(Graph* graph);
-void writeArrayToFile(Graph* graph, int new_index, vector<vector<int>> cur_diag,  vector<vector<int>> new_diag);
-void writeArrayToFile2D(Graph* graph, int new_index, vector<int> cur_diag,  vector<int> new_diag);
+void young_level_3D(Graph* graph); // 3D Young graph generator
+void young_level_2D(Graph* graph); // 2D Young graph generator
+void find_kops(Graph* graph); // Algorithm of Kops
+void find_rombs(Graph* graph); // Optimisation for the Algorithm of Dual Paths
+int central_normal(Graph* graph); // Changing probabilities by the Algorithm of Dual Paths
+void delete_last(Graph* graph); // Delete last level of the graph
+void writeArrayToFile(Graph* graph, int new_index, vector<vector<int>> cur_diag,  vector<vector<int>> new_diag); // Add edge info to file (3D)
+void writeArrayToFile2D(Graph* graph, int new_index, vector<int> cur_diag,  vector<int> new_diag); // Add edge info to file (2D)
 
 //// TO DEBUG
 ofstream outf(to_string(VER1) + " to " + to_string(VER2) + ".txt");
@@ -128,30 +128,31 @@ int main()
 {
     if (algorithm == "kops")
     {
-        ABSTRACT_STOCK = 1;
-        TASK = 0;
+        ABSTRACT_STOCK = 1; // Algorithm of Kops is always running with stock
+        TASK = 0; // Not to let the Algorithm of Dual Paths perform
     }
     if (!special_folder_description.empty()) {folder_name = folder_name + "_" + special_folder_description;}
     const char* fn = folder_name.c_str();
     if (make_dir(fn) == 0) {
-        cout << "Папка создана: " << folder_name << endl;
+        cout << "The folder created: " << folder_name << endl;
     } else {
-        cout << "Папка уже существует: " << folder_name << endl;
+        cout << "The folder has already existed: " << folder_name << endl;
     }
 
     if (!outfile)
     {
-        // то выводим сообщение об ошибке и выполняем функцию exit()
         cerr << "Uh oh, file could not be opened for writing!" << endl;
         exit(1);
     }
 
     Graph graph;
     clock_t start = clock();
-    // Заполняем граф Юнга вершинами и ребрами до нужного этажа
+    // Generating graph
     if (graph_name == "3D")
     {
-        graph.current_young_list_3D.push_back({{{0}, {0}}});
+        graph.current_young_list_3D.push_back({{{0}, {0}}}); // xyz: max y equals the number of integers in the first vector<int> in this row
+                                                             // max x equals the first number in the first vector<int> in this row
+                                                             // max z equals the number of vector<int> in this row
         graph.current_young_list_3D.push_back({{{1}, {0}}});
         graph.vertexList.push_back(Vertex(0));
         graph.indexes.push_back(0);
@@ -161,24 +162,25 @@ int main()
     }
     if ((graph_name == "2D") or (graph_name == "2D-2str") or (graph_name == "2D-3str") or (graph_name == "Pascal"))
     {
-        graph.current_young_list.push_back({{0}});
+        graph.current_young_list.push_back({{0}}); // xyz: max y equals the number of integers in this row
+                                                   // max x equals the first number in this row
         graph.current_young_list.push_back({{1}});
         graph.vertexList.push_back(Vertex(0));
         graph.vertexList.push_back(Vertex(1));
         young_level_2D(&graph);
     }
 
-    if (algorithm == "rombs") find_rombs(&graph);
-    if (algorithm == "kops") find_kops(&graph);
+    if (algorithm == "rombs") find_rombs(&graph); // Find all Dual Paths in the graph
+    if (algorithm == "kops") find_kops(&graph); // Find all Kop probabilities
 
 
-    for (int task = 0; task <= TASK; task++)
+    for (int task = 0; task <= TASK; task++) // To cut flores and find transition probabilities on graphs with different amount of levels
     {
         if (task)
         {
             cout << endl << "Task " << task << " of " << TASK << endl;
         }
-        for (int times = 0; times < TIMES; times++)
+        for (int times = 0; times < TIMES; times++) // In order to stop Algorithm of Dual Paths if the loop occures
         {
             int result = central_normal(&graph);
             if (result == 6)
