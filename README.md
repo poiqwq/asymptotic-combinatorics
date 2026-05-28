@@ -8,6 +8,8 @@ This is only the raw materials of the project. Access to the full research docum
 
 Generate graph, run an algorithm of finding central measure --> get transition probabilities of it's edges
 
+---
+
 ##### Graphs
 - Pascal graph
 - Young graph
@@ -15,9 +17,13 @@ Generate graph, run an algorithm of finding central measure --> get transition p
 - The graph of three-row Young diagrams
 - The graph of three-dimensional Young diagrams (3D Young Graph)
 
+---
+
 ##### Algorithms
 - The Algorithm of Dual Paths (iterative)
 - The Algorithm of Kops (edges orientation changing)
+
+---
 
 ##### Arguments
 
@@ -30,6 +36,8 @@ Generate graph, run an algorithm of finding central measure --> get transition p
 | ABSTRACT_STOCK | Choose will the graph be ended with its last generated level or all of the vertexes of the last level would be connected with abstract one on the next level |
 | START_WEIGHT | Choose start transition probabilities of the edges |
 | FILE_NUM | Choose the amount of edges to get their transition probabilities |
+
+---
 
 
 
