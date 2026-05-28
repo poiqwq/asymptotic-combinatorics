@@ -2,7 +2,7 @@
 
 ## Finding of Central Measure on an Oriented Graph
 
-This is only the row materials of the project. Access to the full research documentation can be granted if you send a request by an email.
+This is only the raw materials of the project. Access to the full research documentation can be granted if you send a request by an email.
 
 ### all_in_one_pro.cpp
 
